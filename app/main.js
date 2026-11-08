@@ -9,6 +9,7 @@ import { initCanvas } from './ui/canvas.js';
 import { initTooltips } from './ui/tooltip.js';
 import { ensureProfile, renderAvatarButton } from './ui/profile.js';
 import { startOnboarding } from './ui/onboarding.js';
+import { shouldGate, renderGate } from './ui/gate.js';
 
 /** On first run ask the browser to keep our data, record the answer, and expose it to the UI. */
 async function checkPersistence() {
@@ -27,7 +28,6 @@ async function checkPersistence() {
 }
 
 async function boot() {
-  applyFavicon();
   await state.init(await openStorage());
   await checkPersistence();
   ensureProfile();
@@ -44,11 +44,36 @@ async function boot() {
   initSidebar(document.getElementById('sidebar'), { renderAvatarButton });
   startRouter();
   initCanvas(document.getElementById('canvas'));
-  document.getElementById('app').hidden = false;
+  document.getElementById('app').hidden = gated;
 
   if (!state.pref('onboarded')) startOnboarding();
   // "Replay onboarding" in the profile popover asks for a fresh run on the blank canvas.
   state.subscribe('onboardingRequest', () => { go('#/'); startOnboarding(); });
 }
 
-boot();
+// ---------- Gate first: on phones and narrow windows nothing else loads ----------
+let gated = false;
+let booted = false;
+
+function checkGate() {
+  gated = shouldGate();
+  const gate = document.getElementById('gate');
+  const app = document.getElementById('app');
+  gate.hidden = !gated;
+  document.querySelector('.skip-link').hidden = gated;
+  if (gated) {
+    if (!gate.childElementCount) renderGate(gate);
+    app.hidden = true;
+  } else if (!booted) {
+    booted = true;
+    boot();
+  } else {
+    app.hidden = false;
+  }
+}
+
+applyFavicon();
+checkGate();
+// Re-check when the window is resized or a pointer is plugged in or removed.
+window.addEventListener('resize', checkGate);
+matchMedia('(any-pointer: fine)').addEventListener?.('change', checkGate);

@@ -272,7 +272,7 @@ Commit at the end of each phase with a clear message, then update §14.
 - [x] Phase 3
 - [x] Phase 4
 - [x] Phase 5
-- [ ] Phase 6
+- [x] Phase 6
 
 ### Later (not in shell scope)
 - Real games from the roster: 20 open-source (Unblocked), 17 rebuilds and 42 Originals.

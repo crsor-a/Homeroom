@@ -40,7 +40,8 @@ export function mountPlayer(view, game) {
   frame.setAttribute('sandbox', isEmbed ? SANDBOX.embed : SANDBOX.local);
   frame.setAttribute('allow', 'fullscreen; gamepad; autoplay');
   if (isEmbed) frame.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
-  player.prepend(frame);
+  // After the overlay in DOM order, so keyboard users reach the controls before the game.
+  player.append(frame);
 
   let destroyed = false;
   let started = false;
@@ -69,7 +70,8 @@ export function mountPlayer(view, game) {
   let last = performance.now();
   let lastFlush = last;
   // document.hasFocus() stays true while focus is inside the game iframe.
-  const active = () => started && document.visibilityState === 'visible' && document.hasFocus() && player.isConnected;
+  // getClientRects() is empty when the player is not rendered (e.g. the device gate is showing).
+  const active = () => started && document.visibilityState === 'visible' && document.hasFocus() && player.getClientRects().length > 0;
   function flush() {
     if (pending > 0) addPlaytime(game.id, pending);
     pending = 0;
