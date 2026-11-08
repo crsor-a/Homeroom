@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Placeholder game</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: grid; grid-template-rows: 1fr auto; background: #000; color: #f5f5f7;
+      font: 13px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    }
+    canvas { width: 100%; height: 100%; display: block; }
+    .hud {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+      padding: 12px 16px; border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .hud strong { font-size: 15px; margin-right: auto; }
+    .tag { color: #a1a1a6; font-variant-numeric: tabular-nums; }
+    button {
+      height: 30px; padding: 0 12px; border: 1px solid rgba(255,255,255,.14); border-radius: 8px;
+      background: transparent; color: inherit; font: inherit; cursor: pointer;
+    }
+    button:hover { background: #1c1c1e; }
+    button:focus-visible { outline: 2px solid #0a84ff; outline-offset: 2px; }
+  </style>
+  <script src="../../sdk/homeroom-sdk.js"></script>
+</head>
+<body>
+  <canvas id="stage" aria-label="Placeholder game animation"></canvas>
+  <div class="hud">
+    <strong id="title">Placeholder</strong>
+    <span class="tag" id="score" aria-live="polite">Score 0</span>
+    <span class="tag" id="status">Running</span>
+    <button id="add" type="button">Score +10</button>
+    <button id="submit" type="button">Submit score</button>
+    <button id="save" type="button">Save</button>
+    <button id="load" type="button">Load</button>
+  </div>
+  <script>
+    // A demo game that exercises every part of the Homeroom SDK.
+    const params = new URLSearchParams(location.search);
+    const title = params.get('title') || 'Placeholder';
+    document.title = title;
+    document.getElementById('title').textContent = title;
+
+    let score = 0, paused = false, muted = false;
+    const $score = document.getElementById('score');
+    const $status = document.getElementById('status');
+    const showScore = () => { $score.textContent = 'Score ' + score; };
+    const showStatus = (text) => {
+      $status.textContent = text || ((paused ? 'Paused' : 'Running') + (muted ? ', muted' : ''));
+    };
+
+    document.getElementById('add').onclick = () => { score += 10; showScore(); };
+    document.getElementById('submit').onclick = () => { Homeroom.score(score); showStatus('Score sent'); };
+    document.getElementById('save').onclick = () => { Homeroom.save({ score, savedAt: Date.now() }); showStatus('Saved'); };
+    document.getElementById('load').onclick = async () => {
+      const data = await Homeroom.load();
+      if (data && typeof data.score === 'number') { score = data.score; showScore(); showStatus('Loaded'); }
+      else showStatus('Nothing saved yet');
+    };
+
+    Homeroom.on('pause', () => { paused = true; showStatus(); });
+    Homeroom.on('resume', () => { paused = false; showStatus(); });
+    Homeroom.on('mute', (value) => { muted = value; showStatus(); });
+
+    // A drifting dot with a short trail, so it is obvious when the game is paused.
+    const canvas = document.getElementById('stage');
+    const ctx = canvas.getContext('2d');
+    const dot = { x: 80, y: 80, vx: 2.2, vy: 1.6 };
+    const trail = [];
+    function resize() {
+      const r = canvas.getBoundingClientRect();
+      canvas.width = Math.max(1, r.width * devicePixelRatio);
+      canvas.height = Math.max(1, r.height * devicePixelRatio);
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+    function frame() {
+      const w = canvas.width / devicePixelRatio, h = canvas.height / devicePixelRatio;
+      if (!paused) {
+        dot.x += dot.vx; dot.y += dot.vy;
+        if (dot.x < 10 || dot.x > w - 10) dot.vx *= -1;
+        if (dot.y < 10 || dot.y > h - 10) dot.vy *= -1;
+        trail.push({ x: dot.x, y: dot.y });
+        if (trail.length > 40) trail.shift();
+      }
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = 'rgba(255,255,255,.06)';
+      ctx.font = '600 28px -apple-system, system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(title, w / 2, h / 2);
+      trail.forEach((p, i) => {
+        ctx.fillStyle = `rgba(255,255,255,${(i / trail.length) * 0.35})`;
+        ctx.beginPath(); ctx.arc(p.x, p.y, 2 + (i / trail.length) * 4, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(dot.x, dot.y, 8, 0, Math.PI * 2); ctx.fill();
+      requestAnimationFrame(frame);
+    }
+    addEventListener('resize', resize);
+    resize();
+    frame();
+  </script>
+</body>
+</html>

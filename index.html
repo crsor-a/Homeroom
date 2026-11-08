@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#000000">
+  <title>Homeroom</title>
+  <!-- The real favicon is generated from app/brand.js at boot; this is the no-JS fallback. -->
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="app/styles/base.css">
+  <link rel="stylesheet" href="app/styles/sidebar.css">
+  <link rel="stylesheet" href="app/styles/library.css">
+  <link rel="stylesheet" href="app/styles/popups.css">
+  <link rel="stylesheet" href="app/styles/onboarding.css">
+  <script type="module" src="app/main.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#canvas">Skip to Game Canvas</a>
+  <div id="app" class="app" hidden>
+    <aside id="sidebar" class="sidebar" aria-label="Sidebar"></aside>
+    <main id="canvas" class="canvas" tabindex="-1" aria-label="Game Canvas"></main>
+  </div>
+  <div id="gate" class="gate" hidden></div>
+  <noscript><p class="noscript">Homeroom needs JavaScript to run.</p></noscript>
+</body>
+</html>
