@@ -1,7 +1,7 @@
 // The Game Canvas: shows exactly one view at a time (blank, library or player) based on the route.
 
-import { h, esc } from '../dom.js';
-import { icon } from '../icons.js';
+import { h } from '../dom.js';
+import { stateView } from './states.js';
 import { get, subscribe } from '../state.js';
 import { gameById } from '../catalog.js';
 import { mountLibrary } from './library.js';
@@ -9,18 +9,6 @@ import { mountPlayer } from './player.js';
 
 let root;
 let current = null; // { type, id, api }
-
-/** A centered message with optional actions, used for empty and error states. */
-export function stateView({ iconName = 'alert', title, text = '', actions = [] }) {
-  return h('div', { class: 'state', role: 'status' },
-    h('span', { html: icon(iconName, { size: 28 }) }),
-    h('h2', {}, title),
-    text ? h('p', {}, text) : null,
-    actions.length ? h('div', { class: 'state-actions' },
-      actions.map((a) => a.href
-        ? h('a', { class: 'btn' + (a.primary ? ' btn-primary' : ''), href: a.href }, a.label)
-        : h('button', { class: 'btn' + (a.primary ? ' btn-primary' : ''), type: 'button', onclick: a.onClick }, a.label))) : null);
-}
 
 function swap(type, id, mount) {
   current?.api?.destroy?.();
@@ -59,7 +47,7 @@ function show(route) {
       if (!game) {
         view.append(stateView({
           title: "We couldn't find that game",
-          text: `There is no game called "${esc(route.id)}" in the catalog. It may have been removed.`,
+          text: `There is no game called "${route.id}" in the catalog. It may have been removed.`,
           actions: [{ label: 'Open the Library', primary: true, href: '#/library' }],
         }));
         return null;

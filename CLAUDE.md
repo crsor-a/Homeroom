@@ -169,6 +169,7 @@ A centered dialog with: title, source (with explanation), genre, tags, full desc
 - The game loads in an iframe that fills the canvas.
   - Local games (original/unblocked): `sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen"`.
   - Embeds: `sandbox="allow-scripts allow-same-origin allow-popups allow-fullscreen"`, `referrerpolicy="strict-origin-when-cross-origin"`.
+  - Implementation note: `allow-fullscreen` is not a valid sandbox token (Chrome logs an error for it), so it is left out of `sandbox` and fullscreen is granted with `allow="fullscreen; gamepad; autoplay"` on the iframe instead.
 - A slim top-right overlay (it fades in on mouse move and hides after 2s idle) has Fullscreen, Game Info and Close (back to the last library view or blank).
 - On load: add to Recents, increment times played, start the playtime timer.
 
@@ -268,7 +269,7 @@ Commit at the end of each phase with a clear message, then update §14.
 - [x] Phase 0
 - [x] Phase 1
 - [x] Phase 2
-- [ ] Phase 3
+- [x] Phase 3
 - [ ] Phase 4
 - [ ] Phase 5
 - [ ] Phase 6
