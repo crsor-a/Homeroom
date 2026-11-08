@@ -266,7 +266,7 @@ Commit at the end of each phase with a clear message, then update §14.
 ## 14. Status
 
 - [x] Phase 0
-- [ ] Phase 1
+- [x] Phase 1
 - [ ] Phase 2
 - [ ] Phase 3
 - [ ] Phase 4

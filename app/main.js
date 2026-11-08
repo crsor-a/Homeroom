@@ -1,14 +1,28 @@
 // Boot: gate check, then storage, then the shell (and onboarding on first visit).
-import { applyFavicon, cometSVG } from './brand.js';
+import { applyFavicon } from './brand.js';
+import * as state from './state.js';
+import { openStorage } from './storage.js';
+import { loadCatalog } from './catalog.js';
+import { start as startRouter } from './router.js';
+import { initSidebar } from './ui/sidebar.js';
+import { initCanvas } from './ui/canvas.js';
 
-function boot() {
+async function boot() {
   applyFavicon();
-  const app = document.getElementById('app');
-  const sidebar = document.getElementById('sidebar');
-  sidebar.innerHTML = `<div class="sb-normal"><div class="sb-top">
-    <a class="sb-brand" href="#/" aria-label="Homeroom home">${cometSVG({ size: 22 })}</a>
-  </div><nav class="sb-nav" aria-label="Main"></nav></div>`;
-  app.hidden = false;
+  await state.init(await openStorage());
+
+  try {
+    state.set('catalog', await loadCatalog());
+  } catch (err) {
+    console.warn('Catalog failed to load', err);
+    state.set('catalogError', String(err?.message || err));
+    state.set('catalog', []);
+  }
+
+  initSidebar(document.getElementById('sidebar'));
+  startRouter();
+  initCanvas(document.getElementById('canvas'));
+  document.getElementById('app').hidden = false;
 }
 
 boot();
