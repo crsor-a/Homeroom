@@ -77,3 +77,34 @@
 .gi-stats > div { padding: 10px 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
 .gi-stats dt { color: var(--text-3); font-size: var(--fs-12); }
 .gi-stats dd { margin: 4px 0 0; font-size: var(--fs-15); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* ---------- Profile popover ---------- */
+
+.profile-pop { width: 320px; padding: 14px; transform-origin: bottom left; }
+.pf-head { display: flex; align-items: center; gap: 12px; }
+.pf-id { flex: 1; min-width: 0; }
+.pf-name { width: 100%; height: 30px; font-size: var(--fs-15); font-weight: 600; }
+.pf-joined { margin-top: 4px; color: var(--text-3); font-size: var(--fs-12); }
+
+.pf-editor { margin-top: 14px; }
+.picker { margin: 0 0 10px; padding: 0; border: 0; }
+.picker legend { margin-bottom: 6px; padding: 0; color: var(--text-3); font-size: var(--fs-12); }
+.swatches { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; }
+.symbols { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; }
+.swatch, .symbol { position: relative; display: grid; place-items: center; cursor: pointer; }
+.swatch span:first-of-type { width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12) inset; }
+.symbol > span:first-of-type { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; opacity: 0.55; transition: opacity var(--dur) var(--ease); }
+.symbol:hover > span:first-of-type { opacity: 0.85; }
+.swatch input:checked + span { box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--text); }
+.symbol input:checked + span { opacity: 1; box-shadow: 0 0 0 1.5px var(--text); }
+.swatch input:focus-visible + span, .symbol input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.pf-stats { display: grid; gap: 6px; margin: 4px 0 12px; padding: 10px 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
+.pf-stats div { display: flex; justify-content: space-between; gap: 12px; }
+.pf-stats dt { color: var(--text-3); font-size: var(--fs-12); }
+.pf-stats dd { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--fs-12); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+.pf-status { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; font-size: var(--fs-12); }
+.pf-status.is-ok { color: var(--text-2); }
+.pf-status.is-warn { color: #ffd60a; }
+.pf-actions { padding-top: 6px; border-top: 1px solid var(--line); }

@@ -270,7 +270,7 @@ Commit at the end of each phase with a clear message, then update §14.
 - [x] Phase 1
 - [x] Phase 2
 - [x] Phase 3
-- [ ] Phase 4
+- [x] Phase 4
 - [ ] Phase 5
 - [ ] Phase 6
 

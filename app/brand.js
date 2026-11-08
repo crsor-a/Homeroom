@@ -1,7 +1,7 @@
 // Brand marks live here and only here, so the placeholder comet can be swapped later.
 // The comet: a round head with a tapered three-stroke tail, drawn on a 32x32 grid.
 
-const COMET_BODY = `
+export const COMET_BODY = `
   <circle cx="22" cy="10" r="5"/>
   <path d="M20.1 14.1 17.9 11.9 5 27z"/>
   <path d="M17.2 11.2 15.8 9.8 8.5 18.5z"/>
