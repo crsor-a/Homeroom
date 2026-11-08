@@ -3,11 +3,12 @@ import { applyFavicon } from './brand.js';
 import * as state from './state.js';
 import { openStorage, requestPersistence, isPersisted } from './storage.js';
 import { loadCatalog } from './catalog.js';
-import { start as startRouter } from './router.js';
+import { start as startRouter, go } from './router.js';
 import { initSidebar } from './ui/sidebar.js';
 import { initCanvas } from './ui/canvas.js';
 import { initTooltips } from './ui/tooltip.js';
 import { ensureProfile, renderAvatarButton } from './ui/profile.js';
+import { startOnboarding } from './ui/onboarding.js';
 
 /** On first run ask the browser to keep our data, record the answer, and expose it to the UI. */
 async function checkPersistence() {
@@ -44,6 +45,10 @@ async function boot() {
   startRouter();
   initCanvas(document.getElementById('canvas'));
   document.getElementById('app').hidden = false;
+
+  if (!state.pref('onboarded')) startOnboarding();
+  // "Replay onboarding" in the profile popover asks for a fresh run on the blank canvas.
+  state.subscribe('onboardingRequest', () => { go('#/'); startOnboarding(); });
 }
 
 boot();
