@@ -6,6 +6,7 @@ import { loadCatalog } from './catalog.js';
 import { start as startRouter } from './router.js';
 import { initSidebar } from './ui/sidebar.js';
 import { initCanvas } from './ui/canvas.js';
+import { initTooltips } from './ui/tooltip.js';
 
 async function boot() {
   applyFavicon();
@@ -19,6 +20,7 @@ async function boot() {
     state.set('catalog', []);
   }
 
+  initTooltips();
   initSidebar(document.getElementById('sidebar'));
   startRouter();
   initCanvas(document.getElementById('canvas'));

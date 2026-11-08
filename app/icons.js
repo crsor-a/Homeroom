@@ -34,7 +34,7 @@ const ICONS = {
   adventure: '<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
   sandbox: '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>',
   sports: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c3.2 2.6 3.2 14.4 0 17M12 3.5c-3.2 2.6-3.2 14.4 0 17"/>',
-  puzzle: '<path d="M5 8h3a2 2 0 0 1 4 0h3v3a2 2 0 0 1 0 4v4H5z"/>',
+  puzzle: '<path d="M5 6.5h4v-1a2.5 2.5 0 0 1 5 0v1h4v4h-1a2.5 2.5 0 0 0 0 5h1v4H5z"/>',
   arcade: '<circle cx="12" cy="6.5" r="2.5"/><path d="M12 9v6M5 15h14v4.5H5z"/>',
   strategy: '<path d="M4 17l1.5-9 4.5 4 2-6 2 6 4.5-4 1.5 9z"/><path d="M4 20h16"/>',
   horror: '<path d="M6 20v-9a6 6 0 0 1 12 0v9l-2-1.5-2 1.5-2-1.5-2 1.5-2-1.5z"/><path d="M10 11h.01M14 11h.01"/>',
